@@ -1,7 +1,11 @@
-import { StyleSheet } from 'react-native';
-import { Colors } from 'react-native-ui-lib';
+import {
+    StyleSheet
+} from 'react-native';
+import {
+    Colors
+} from 'react-native-ui-lib';
 
-const colors ={
+const colors = {
     primaryColor: "#083D77",
     secondaryColor: "#EBEBD3",
     tertiaryColor: "#DA4167",
@@ -18,22 +22,28 @@ const colors ={
 
 export const styles = StyleSheet.create({
     placeholder: {
-      color: colors.darkerGrey,
+        color: colors.darkerGrey,
     },
     label: {
-      color: colors.darkerGrey,
-      fontSize: 12,
+        color: colors.darkerGrey,
+        fontSize: 12,
     },
     withFrame: {
-      borderWidth: 1,
-      borderColor: colors.darkGrey,
-      padding: 13,
-      borderRadius: 4,
-      backgroundColor: colors.lightGrey,
-      marginBottom: 8,
+        borderWidth: 1,
+        borderColor: colors.darkGrey,
+        padding: 13,
+        borderRadius: 4,
+        backgroundColor: colors.lightGrey,
+        marginBottom: 8,
     },
+    multilineLabel: {
+        color: colors.darkerGrey,
+        fontSize: 12,
+        marginBottom: 10
+    },
+
     divider: {
-      borderBottomColor: colors.darkGrey,
-      borderBottomWidth: 1,
+        borderBottomColor: colors.darkGrey,
+        borderBottomWidth: 1,
     },
-  });
+});
