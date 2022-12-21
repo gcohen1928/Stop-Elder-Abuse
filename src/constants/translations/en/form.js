@@ -3,7 +3,7 @@ export default {
     section2: "Victim's Information",
     section3: "Persons Responsible",
     section4: "Attatchments",
-    yourName: "Your Full Name",
+    name: "Your Full Name",
     address: "Address",
     city: "City",
     postalCode: "Postal Code",

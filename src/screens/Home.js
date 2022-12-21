@@ -13,7 +13,9 @@ export default Home = () => {
       <Text body primaryColor>
         Button
       </Text>
-      <Button label="Button" body bg-primaryColor></Button>
+      <Button label="Button" 
+      onPress={() => console.log("Button pressed")}
+      body bg-primaryColor></Button>
     </View>
   );
 };

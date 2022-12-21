@@ -1,24 +1,12 @@
 import {
     configureStore
 } from '@reduxjs/toolkit'
+import formSlice from './form-slice'
 
-const initialState = {
-    data: {}
-}
-
-const reducer = (state = initialState, action) => {
-    switch (action.type) {
-        case 'SET_DATA':
-            return {
-                ...state,
-                data: action.payload
-            }
-        default:
-            return state
-    }
-}
 
 const store = configureStore({
-    reducer
+    reducer: {
+        form: formSlice.reducer
+    }
 })
 export default store
