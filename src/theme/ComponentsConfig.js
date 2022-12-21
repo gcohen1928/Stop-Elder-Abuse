@@ -27,6 +27,7 @@ export const themeInit = () => {
     h3: { fontSize: 24, fontWeight: "500" },
     h4: { fontSize: 20, fontWeight: "500" },
     body: { fontSize: 18, fontWeight: "400" },
+    label: { fontSize: 12, fontWeight: "400" },
   });
 
   Spacings.loadSpacings({
