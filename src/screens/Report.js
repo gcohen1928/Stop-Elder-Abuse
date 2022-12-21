@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useReducer, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   View,
@@ -7,41 +7,19 @@ import {
   TouchableOpacity,
   Incubator,
   KeyboardAwareScrollView,
+  Checkbox,
   Colors,
-  NumberInput
 } from "react-native-ui-lib";
-import { StyleSheet } from "react-native";
 import { useTranslation } from "react-i18next";
 import { connect } from "react-redux";
 import { changeData, sendData } from "../redux/form-actions";
+import { styles } from "../theme/styles";
 
 const { TextField } = Incubator;
 
-const styles = StyleSheet.create({
-  placeholder: {
-    color: Colors.darkerGrey,
-  },
-  label: {
-    color: Colors.darkerGrey,
-    fontSize: 12,
-  },
-  withFrame: {
-    borderWidth: 1,
-    borderColor: Colors.darkGrey,
-    padding: 13,
-    borderRadius: 4,
-    backgroundColor: Colors.lightGrey,
-    marginBottom: 8,
-  },
-  divider: {
-    borderBottomColor: Colors.darkGrey,
-    borderBottomWidth: 1,
-  },
-});
-
 const Header = ({ navigation, t }) => {
   return (
-    <View row marginT-s3 marginB-s5>
+    <View row marginB-s5>
       <View left>
         <TouchableOpacity body textColor onPress={() => navigation.goBack()}>
           <Text body primaryColor>
@@ -64,15 +42,39 @@ const SectionHeader = ({ title, t }) => {
   );
 };
 
+const initialState = {
+    name: "",
+    address: "",
+    phone: "",
+    city: "",
+    postalCode: "",
+    contactConsent: false,
+    agency: "",
+    jobTitle: "",
+    relationship: "",
+}
+
+const reducer = (state, action) => {
+    switch(action.type) {
+        case "UPDATE":
+            return {
+                ...state,
+                [action.key]: action.value
+            }
+        default:
+            return state;
+        }
+}
+
 const Report = ({ navigation }, props) => {
   const { t } = useTranslation();
-  const dispatch = useDispatch();
+//   const dispatch = useDispatch();
   const data = useSelector((state) => state.form.name);
-
+  const [reducerState, dispatch] = useReducer(reducer, initialState);
   const handleSubmit = () => {
-    console.log(url);
-    dispatch(sendData(url));
-    dispatch(changeData(url));
+    console.log(reducerState);
+    // dispatch(sendData(url));
+    // dispatch(changeData(url));
   };
 
   const [url, setUrl] = useState("");
@@ -85,24 +87,26 @@ const Report = ({ navigation }, props) => {
           label={t("form:name")}
           labelStyle={styles.label}
           onChangeText={(text) => {
-            setUrl(text);
+             dispatch({type: "UPDATE", key: "name", value: text})
           }}
-          value={url}
+          value={reducerState.name}
           placeholder={t("form:name")}
           placeholderStyle={styles.placeholder}
           text70
+          maxLength={40}
           fieldStyle={styles.withFrame}
         />
         <TextField
           label={t("form:address")}
           labelStyle={styles.label}
           onChangeText={(text) => {
-            setUrl(text);
+            dispatch({type: "UPDATE", key: "address", value: text})
           }}
-          value={url}
-          placeholder="Enter URL"
+          value={reducerState.address}
+          placeholder={t("form:address")}
           placeholderStyle={styles.placeholder}
           text70
+          maxLength={40}
           fieldStyle={styles.withFrame}
         />
         <View row spread>
@@ -111,12 +115,13 @@ const Report = ({ navigation }, props) => {
               label={t("form:city")}
               labelStyle={styles.label}
               onChangeText={(text) => {
-                setUrl(text);
+                dispatch({type: "UPDATE", key: "city", value: text})
               }}
-              value={url}
+              value={reducerState.city}
               placeholder={t("form:city")}
               placeholderStyle={styles.placeholder}
               text70
+              maxLength={20}
               fieldStyle={styles.withFrame}
             />
           </View>
@@ -125,28 +130,44 @@ const Report = ({ navigation }, props) => {
               label={t("form:postalCode")}
               labelStyle={styles.label}
               onChangeText={(text) => {
-                setUrl(text);
+                dispatch({type: "UPDATE", key: "postalCode", value: text})
               }}
-              value={url}
+              value={reducerState.postalCode}
               placeholder={t("form:postalCode")}
               placeholderStyle={styles.placeholder}
               text70
+              maxLength={5}
               fieldStyle={styles.withFrame}
             />
           </View>
         </View>
         <TextField
-              label={t("form:phone")}
-              labelStyle={styles.label}
-              onChangeText={(text) => {
-                setUrl(text);
-              }}
-              value={url}
-              placeholder={t("form:phone")}
-              placeholderStyle={styles.placeholder}
-              text70
-              fieldStyle={styles.withFrame}
-            />
+          label={t("form:phone")}
+          labelStyle={styles.label}
+          onChangeText={(text) => {
+            dispatch({type: "UPDATE", key: "phone", value: text})
+          }}
+          value={reducerState.phone}
+          placeholder={t("form:phone")}
+          placeholderStyle={styles.placeholder}
+          text70
+          maxLength={15}
+          fieldStyle={styles.withFrame}
+        />
+        <View row>
+          <Text style={styles.label} darkGrey>
+            {t("form:contactConsent")}
+          </Text>
+          <Checkbox
+            value={reducerState.contactConsent}
+            onValueChange={(check) => dispatch({type: "UPDATE", key: "contactConsent", value: check})}
+            borderRadius={5}
+            size={17}
+            color={Colors.primaryColor}
+            iconColor={Colors.white}
+            marginL-s5
+          />
+        </View>
         <Text>{data}</Text>
       </View>
       <Button onPress={handleSubmit}>
