@@ -1,4 +1,4 @@
-import React, { useReducer, useState } from "react";
+import React, { useReducer, useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   View,
@@ -19,6 +19,8 @@ import * as ImagePicker from "expo-image-picker";
 import { Video } from "expo-av";
 import { FormInput, SectionHeader, SquareButton } from "../components/Input";
 import { Platform } from "react-native";
+import { formActions } from "../redux/form-slice";
+
 
 
 
@@ -104,7 +106,7 @@ const OtherInfo = ({ state, dispatch, t }) => {
 };
 
 const Attatchments = ({ state, dispatch, t }) => {
-  const attatchments = ["image1", "image2", "video1", "video2"];
+  const attatchments = ["image1", "image2"];
   const pickImage = async ({ video, key }) => {
     let pickerResult = await ImagePicker.launchImageLibraryAsync({
       allowsEditing: true,
@@ -224,10 +226,10 @@ const initialState = {
 
 const Report = ({ navigation }, props) => {
   const { t } = useTranslation();
-  const data = useSelector((state) => state.form.name);
+  const data = useSelector((state) => state.form);
   const [state, dispatch] = useReducer(reducer, initialState);
   const globalDispatch = useDispatch();
-  const [activeIndex, setActiveIndex] = useState(3);
+  const [activeIndex, setActiveIndex] = useState(0);
   const [completedStepIndex, setCompletedStepIndex] = useState(undefined);
 
   const renderCurrentStep = ({ navigation, state, dispatch, t }) => {
@@ -290,14 +292,23 @@ const Report = ({ navigation }, props) => {
     );
   };
 
-  const handleSubmit = () => {
-    console.log("state!" + state);
-    const res = globalDispatch(sendReportAction(state));
-    console.log(res)
-    // dispatch(changeData(url));
-    dispatch({ type: "RESET" });
-    navigation.navigate("Home");
+  const handleSubmit = async () => {
+    globalDispatch(sendReportAction(state));
   };
+
+
+  useEffect(() => {
+    if (data.complete){
+      alert("Report Submitted!")
+      dispatch({ type: "RESET" });
+      setActiveIndex(0);
+      setCompletedStepIndex(undefined);
+    } else if (data.failed) {
+      alert("Report Upload Failed!")
+    }
+    globalDispatch(formActions.resetData());
+  }, [data.complete, data.failed]);
+
   return (
     <KeyboardAwareScrollView>
       <View flex padding-page top marginT-s10>

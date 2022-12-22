@@ -3,12 +3,18 @@ import { createSlice } from "@reduxjs/toolkit";
 const formSlice = createSlice({
   name: "form",
   initialState: {
-    name: "Joh!",
+    complete : false,
+    failed: false, 
   },
   reducers: {
     setData(state, action) {
-      state.name = action.payload;
+      state.complete = action.payload.complete;
+      state.failed = action.payload.failed;
     },
+    resetData(state, action){
+      state.complete = false;
+      state.failed = false;
+    }
   },
 });
 

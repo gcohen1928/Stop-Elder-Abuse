@@ -4,10 +4,13 @@ import {sendReport, uploadImage} from '../../firebase'
 export const sendReportAction = (report) => {
   return async (dispatch) => {
     const sendRequest = async () => {
-      console.log("sending data")
-     console.log("sending report to firebase")
-     console.log(report)
       const res = await sendReport(report)
+      if (res){
+        dispatch(formActions.setData({complete: true, failed: true}));
+      }
+      else {
+        dispatch(formActions.setData({complete: false, failed: true}));
+      }
       return res
     };
     try {
@@ -18,9 +21,3 @@ export const sendReportAction = (report) => {
     }
   };
 };
-
-export const changeData = (data) => {
-  return async (dispatch) => {
-    dispatch(formActions.setData(data));
-  };
-}

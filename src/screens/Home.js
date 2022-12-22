@@ -4,16 +4,13 @@ import { View, Text, Card, Button } from "react-native-ui-lib";
 export default Home = () => {
   return (
     <View flex padding-page>
-      <Text h1 marginB-s4>
+      <Text h1 marginT-100 marginB-s4>
         Home
       </Text>
       <Card height={100} center padding-card marginB-s4>
-        <Text body>This is an example card </Text>
+        <Text body>This is an example card, it will all change </Text>
       </Card>
-      <Text body primaryColor>
-        Button
-      </Text>
-      <Button label="Button" 
+      <Button label="Press me!" 
       onPress={() => console.log("Button pressed")}
       body bg-primaryColor></Button>
     </View>
