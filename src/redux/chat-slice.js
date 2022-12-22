@@ -2,16 +2,18 @@ import {
     createSlice
 } from "@reduxjs/toolkit";
 
+
 const chatSlice = createSlice({
     name: "chat",
     initialState: {
+        chatNumber: null,
         messages: [{
             _id: 1,
-            text: 'Hello, how are you?',
-            createdAt: "2021-03-01T12:00:00.000Z",
+            text: 'Hey, an agent will be with you soon. In the meantime, please describe your issue. We\'ll message you as soon as we get someone on the line for you.',
+            createdAt: new Date ().toISOString(),
             user: {
                 _id: 2,
-                name: 'React Native',
+                name: 'Florida DCF',
                 avatar: 'https://placeimg.com/140/140/any',
             }
         }]
@@ -19,6 +21,12 @@ const chatSlice = createSlice({
 
     },
     reducers: {
+        startChat (state, action) {
+            return {
+                ...state,
+                chatNumber: action.payload
+            }
+        },
         addMessage(state, action) {
             const newMessages = action.payload;
             const existingMessages = state.messages;
@@ -29,7 +37,6 @@ const chatSlice = createSlice({
                 updatedMessages.push(message);
               }
             });
-            console.log("Updated Messages", updatedMessages)
             return {
               ...state,
               messages: updatedMessages,
@@ -45,7 +52,6 @@ const chatSlice = createSlice({
                 updatedMessages.push(message);
               }
             });
-            console.log("Updated Messages", updatedMessages)
             return {
               ...state,
               messages: updatedMessages,

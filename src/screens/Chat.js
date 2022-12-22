@@ -3,11 +3,12 @@ import { View, Text, Button } from "react-native-ui-lib";
 import { GiftedChat } from "react-native-gifted-chat";
 import { useSelector, useDispatch } from "react-redux";
 import { listenForMessages } from "../../firebase";
-import { receiveMessages, sendMessage } from "../redux/chat-actions";
+import { startChat, receiveMessages, sendMessage } from "../redux/chat-actions";
 import {v4 as uuidv4} from 'uuid';
 
 export const Chat = () => {
   const messages = useSelector((state) => state.chat.messages);
+  const chatNumber = useSelector((state) => state.chat.chatNumber);
   const reversedMessages = [...messages].reverse();
   const dispatch = useDispatch();
 
@@ -28,14 +29,20 @@ export const Chat = () => {
         createdAt: message.createdAt.toISOString()
       }));
     
-    dispatch(sendMessage(newMessages));
+    dispatch(sendMessage(newMessages, chatNumber));
   };
   useEffect(() => {
-    const sendRequest = async () => {
-        const res = await listenForMessages(dispatch, receiveMessages);
+    const start = async () => {
+        await dispatch(startChat());
+        }
+    const listen = async (chatNumber) => {
+        console.log(chatNumber)
+        const res = await listenForMessages(dispatch, receiveMessages, chatNumber);
         return res;
     }
-    sendRequest()
+    start();
+    console.log(chatNumber)
+    listen(chatNumber)
   }, []);
   return (
     <>

@@ -116,15 +116,27 @@ async function uploadImageAsync(uri) {
     return await getDownloadURL(fileRef);
 }
 
-const uploadMessage = async (messages) => {
+const createChat = async () => {
     try {
-        // const messagesObject = messages.reduce((acc, message, index) => {
-        //     acc[index] = message;
-        //     return acc;
-        //   }, {});
-        const messagesArray = Object.values(messages);
+        const id = uuidv4();
+        await setDoc(doc(db, "chats", id), {
+            id: id,
+            updatedAt: new Date(),
+            messages: []
+        });
+        return id;
+    } catch (err) {
+        console.error(err);
+        return false;
+    }
+}
 
-        await setDoc(doc(db, "messages", "1"), {
+const uploadMessage = async (messages, chatNumber) => {
+    try {
+        const messagesArray = Object.values(messages);
+        console.log(chatNumber)
+        await setDoc(doc(db, "chats", chatNumber,), {
+            updatedAt: new Date(),
             messages: arrayUnion(...messagesArray),
         }, {
             merge: true
@@ -136,10 +148,12 @@ const uploadMessage = async (messages) => {
     }
 }
 
-const listenForMessages = async (dispatch, action) => {
+const listenForMessages = async (dispatch, action, chatNumber) => {
     try {
-        const unsub = onSnapshot(doc(db, "messages", "1"), (doc) => {
-            //console.log(doc.data().messages)
+        const unsub = onSnapshot(doc(db, "chats", chatNumber), (doc) => {
+            if (doc.data() == undefined) {
+                return;
+            }
             dispatch(action(doc.data().messages))
         });
     } catch (err) {
@@ -152,5 +166,6 @@ export {
     sendReport,
     uploadImage,
     listenForMessages,
-    uploadMessage
+    uploadMessage,
+    createChat
 }
