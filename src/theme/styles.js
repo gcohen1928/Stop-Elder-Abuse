@@ -41,7 +41,12 @@ export const styles = StyleSheet.create({
         fontSize: 12,
         marginBottom: 10
     },
-
+    image: 
+    {
+        width: 250, 
+        height: 250,
+        marginBottom: 10,
+    },
     divider: {
         borderBottomColor: colors.darkGrey,
         borderBottomWidth: 1,

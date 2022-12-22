@@ -1,22 +1,21 @@
 import { formActions } from "./form-slice";
+import {sendReport, uploadImage} from '../../firebase'
 
-export const sendData = (name) => {
+export const sendReportAction = (report) => {
   return async (dispatch) => {
     const sendRequest = async () => {
-        console.log("sending data")
-      const res = await fetch(
-        "https://stop-elder-abuse-default-rtdb.firebaseio.com/data.json",
-        {
-          method: "PUT",
-          body: JSON.stringify(name),
-        }
-      );
-      const data = await res.json();
-      console.log(data)
+      console.log("sending data")
+     console.log("sending report to firebase")
+     console.log(report)
+      const res = await sendReport(report)
+      return res
     };
     try {
-      await sendRequest();
-    } catch (err) {}
+      return await sendRequest();
+    } catch (err) {
+        alert("Something went wrong, please try again later")
+        return false
+    }
   };
 };
 

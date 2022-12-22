@@ -3,4 +3,6 @@ export default {
     languageSelector: "Select Language",
     reportTitle: "Report",
     back: "Back",
+    next: "Next",
+    submit: "Submit",
 }

@@ -29,6 +29,10 @@ export default {
     descriptionInput: "Please describe the follwoing if known: What happened? Where did it happen? When did it happen? Who was involved? What was the outcome? A description of injuries, if any?Frequency of occurence? Any other relevant information?",
     vulnerableTitle: "Description of Vulnerable Adult",
     vulnerableInput: "For the victim, please identify all known physical, mental, or emotional disabilities or limitations that would impact their ability to care and protect themselves. Also, identify if they have any hearing or vision impairments, or if they are unable to communicate effectively.",
+    image1: "Select an Image",
+    image2: "Select an Image",
+    video1: "Select a Video",
+    video2: "Select a Video",
     email : "Email",
     emailConsent: "Do you consent to being contacted via email?",
 }

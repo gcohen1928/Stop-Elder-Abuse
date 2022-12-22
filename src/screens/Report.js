@@ -9,93 +9,18 @@ import {
   KeyboardAwareScrollView,
   Checkbox,
   Colors,
-  Wizard,
+  Image,
 } from "react-native-ui-lib";
 import { useTranslation } from "react-i18next";
 import { connect } from "react-redux";
-import { changeData, sendData } from "../redux/form-actions";
+import { changeData, sendReportAction } from "../redux/form-actions";
 import { styles } from "../theme/styles";
-import { t } from "i18next";
+import * as ImagePicker from "expo-image-picker";
+import { Video } from "expo-av";
+import { FormInput, SectionHeader, SquareButton } from "../components/Input";
+import { Platform } from "react-native";
 
-const { TextField } = Incubator;
 
-const Header = ({ navigation, t }) => {
-  return (
-    <View row marginT-s5 marginB-s5>
-      <View left>
-        <TouchableOpacity body textColor onPress={() => navigation.goBack()}>
-          <Text body primaryColor>
-            {t("common:back")}
-          </Text>
-        </TouchableOpacity>
-      </View>
-      <View marginL-70>
-        <Text h1>{t("common:reportTitle")}</Text>
-      </View>
-    </View>
-  );
-};
-
-const SectionHeader = ({ title, t }) => {
-  return (
-    <View row marginT-s10 marginB-s5 spread paddingB-s5 style={styles.divider}>
-      <Text h4>{t(`form:${title}`)}</Text>
-    </View>
-  );
-};
-
-const FormInput = ({ id, reducer, large }) => {
-  const { t } = useTranslation();
-  return (
-    <TextField
-      label={t(`form:${id}`)}
-      labelStyle={large ? styles.multilineLabel : styles.label}
-      onChangeText={(text) => {
-        reducer.dispatch({ type: "UPDATE", key: id, value: text });
-      }}
-      value={reducer.state[`${id}`]}
-      placeholder={t(`form:${id}`)}
-      placeholderStyle={styles.placeholder}
-      text70
-      maxLength={large ? 2000 : 40}
-      multiline={large ? true : false}
-      fieldStyle={styles.withFrame}
-    />
-  );
-};
-
-const initialState = {
-  name: "",
-  address: "",
-  phone: "",
-  city: "",
-  postalCode: "",
-  contactConsent: false,
-  agency: "",
-  jobTitle: "",
-  relationship: "",
-  victimName: "",
-  victimAddress: "",
-  victimPhone: "",
-  victimCity: "",
-  victimPostalCode: "",
-  DOB: "",
-  sex: "",
-  race: "",
-  SSN: "",
-};
-
-const reducer = (state, action) => {
-  switch (action.type) {
-    case "UPDATE":
-      return {
-        ...state,
-        [action.key]: action.value,
-      };
-    default:
-      return state;
-  }
-};
 
 const ReporterInfo = ({ state, dispatch, t }) => {
   return (
@@ -179,14 +104,130 @@ const OtherInfo = ({ state, dispatch, t }) => {
 };
 
 const Attatchments = ({ state, dispatch, t }) => {
-    
+  const attatchments = ["image1", "image2", "video1", "video2"];
+  const pickImage = async ({ video, key }) => {
+    let pickerResult = await ImagePicker.launchImageLibraryAsync({
+      allowsEditing: true,
+      aspect: [4, 3],
+      mediaTypes:
+        key === "video1" || key === "video2"
+          ? ImagePicker.MediaTypeOptions.Videos
+          : ImagePicker.MediaTypeOptions.Images,
+    });
+    if (!pickerResult.canceled) {
+      dispatch({
+        type: "UPDATE",
+        key: key,
+        value: pickerResult.assets[0].uri
+      });
+    }
+  };
+  return (
+    <>
+      <SectionHeader title="section4" t={t} />
+      {attatchments.map((attatchment, key) => {
+        return (
+          <View center key={key}>
+            {(attatchment === "image1" || attatchment === "image2") &&
+            state[attatchment] ? (
+              <Image
+                style={styles.image}
+                source={{ uri: state[attatchment] }}
+              />
+            ) : null}
+            {(attatchment === "video1" || attatchment === "video2") &&
+            state[attatchment] ? (
+                <>
+                <Video
+                    source={{ uri: state[attatchment] }}
+                    rate={1.0}
+                    volume={1.0}
+                    isMuted={false}
+                    resizeMode="cover"
+                    shouldPlay
+                    isLooping
+                    style={styles.image}
+                />
+                <Text>{state[attatchment]}</Text>
+                </>
+            ) : null}
+            <SquareButton
+              label={t(`form:${attatchment}`)}
+              onPress={async () => await pickImage({ key: attatchment })}
+            />
+          </View>
+        );
+      })}
+      <SectionHeader title="section3" t={t} />
+      <FormInput id="email" reducer={{ state, dispatch }} />
+      <View row spread>
+        <Text label darkerGrey>
+          {t("form:emailConsent")}
+        </Text>
+        <Checkbox
+          value={state.emailConsent}
+          onValueChange={(check) =>
+            dispatch({ type: "UPDATE", key: "emailConsent", value: check })
+          }
+          borderRadius={5}
+          size={17}
+          color={Colors.primaryColor}
+          iconColor={Colors.white}
+          marginL-s5
+          marginT-s1
+        />
+      </View>
+    </>
+  );
 };
+
+const initialState = {
+    name: "",
+    address: "",
+    phone: "",
+    city: "",
+    postalCode: "",
+    contactConsent: false,
+    agency: "",
+    jobTitle: "",
+    relationship: "",
+    victimName: "",
+    victimAddress: "",
+    victimPhone: "",
+    victimCity: "",
+    victimPostalCode: "",
+    DOB: "",
+    sex: "",
+    race: "",
+    SSN: "",
+    image1: "",
+    image2: "",
+    video1: "",
+    video2: "",
+    email: "",
+    emailConsent: false
+  };
+  
+  const reducer = (state, action) => {
+    switch (action.type) {
+      case "UPDATE":
+        return {
+          ...state,
+          [action.key]: action.value,
+        };
+      case "RESET":
+        return initialState
+      default:
+        return state;
+    }
+  };
 
 const Report = ({ navigation }, props) => {
   const { t } = useTranslation();
   const data = useSelector((state) => state.form.name);
   const [state, dispatch] = useReducer(reducer, initialState);
-  const [activeIndex, setActiveIndex] = useState(0);
+  const globalDispatch = useDispatch();
+  const [activeIndex, setActiveIndex] = useState(3);
   const [completedStepIndex, setCompletedStepIndex] = useState(undefined);
 
   const renderCurrentStep = ({ navigation, state, dispatch, t }) => {
@@ -236,23 +277,26 @@ const Report = ({ navigation }, props) => {
   };
 
   const NextButton = () => {
-    const label = activeIndex === 3 ? "Submit" : "Next";
+    const complete = activeIndex === 3
     return (
       <Button
         marginH-50
         marginB-s10
         bg-primaryColor
-        label={label}
+        label={complete? t("common:submit") : t("common:next")}
         labelStyle={{ color: Colors.white }}
-        onPress={goToNextStep}
+        onPress={complete? handleSubmit :  goToNextStep}
       />
     );
   };
 
   const handleSubmit = () => {
-    console.log(state);
-    // dispatch(sendData(url));
+    console.log("state!" + state);
+    const res = globalDispatch(sendReportAction(state));
+    console.log(res)
     // dispatch(changeData(url));
+    dispatch({ type: "RESET" });
+    navigation.navigate("Home");
   };
   return (
     <KeyboardAwareScrollView>
