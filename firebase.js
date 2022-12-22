@@ -25,7 +25,8 @@ import {
     arrayUnion,
     deleteDoc,
     arrayRemove,
-    updateDoc
+    updateDoc,
+    onSnapshot,
 } from "firebase/firestore";
 import 'react-native-get-random-values'
 import {
@@ -54,10 +55,18 @@ const db = getFirestore(app);
 const sendReport = async (data) => {
     try {
         console.log(data)
-        if (data.image1 != "") {data.image1 = await uploadImage(data.image1.replace("file://", ""))}
-        if (data.image2 != "") {data.image2 = await uploadImage(data.image2.replace("file://", ""))}
-        if (data.video1 != "") {data.video1 = await uploadImage(data.video1.replace("file://", ""))}
-        if (data.video2 != "") {data.video2 = await uploadImage(data.video2.replace("file://", ""))}
+        if (data.image1 != "") {
+            data.image1 = await uploadImage(data.image1.replace("file://", ""))
+        }
+        if (data.image2 != "") {
+            data.image2 = await uploadImage(data.image2.replace("file://", ""))
+        }
+        if (data.video1 != "") {
+            data.video1 = await uploadImage(data.video1.replace("file://", ""))
+        }
+        if (data.video2 != "") {
+            data.video2 = await uploadImage(data.video2.replace("file://", ""))
+        }
 
         await addDoc(collection(db, "reports"), data, {
             merge: true
@@ -70,7 +79,7 @@ const sendReport = async (data) => {
 }
 
 
-  const uploadImage = async (uri) => {
+const uploadImage = async (uri) => {
     try {
         const uploadUrl = await uploadImageAsync(uri);
         console.log(uploadUrl);
@@ -107,7 +116,41 @@ async function uploadImageAsync(uri) {
     return await getDownloadURL(fileRef);
 }
 
+const uploadMessage = async (messages) => {
+    try {
+        // const messagesObject = messages.reduce((acc, message, index) => {
+        //     acc[index] = message;
+        //     return acc;
+        //   }, {});
+        const messagesArray = Object.values(messages);
+
+        await setDoc(doc(db, "messages", "1"), {
+            messages: arrayUnion(...messagesArray),
+        }, {
+            merge: true
+        });
+        return true;
+    } catch (err) {
+        console.error(err);
+        return false;
+    }
+}
+
+const listenForMessages = async (dispatch, action) => {
+    try {
+        const unsub = onSnapshot(doc(db, "messages", "1"), (doc) => {
+            //console.log(doc.data().messages)
+            dispatch(action(doc.data().messages))
+        });
+    } catch (err) {
+        console.error(err);
+        return false;
+    }
+}
+
 export {
     sendReport,
-    uploadImage
+    uploadImage,
+    listenForMessages,
+    uploadMessage
 }

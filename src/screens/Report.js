@@ -67,7 +67,7 @@ const VictimInfo = ({ state, dispatch, t }) => {
     <>
       <SectionHeader title="section2" t={t} />
       <FormInput id="victimName" reducer={{ state, dispatch }} />
-      <FormInput id="victimAaddress" reducer={{ state, dispatch }} />
+      <FormInput id="victimAddress" reducer={{ state, dispatch }} />
       <View row spread>
         <View flex marginR-s3>
           <FormInput id="victimCity" reducer={{ state, dispatch }} />

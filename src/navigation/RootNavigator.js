@@ -7,6 +7,7 @@ import { Colors } from "react-native-ui-lib";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { useTranslation } from "react-i18next";
 import Report from "../screens/Report";
+import { Chat } from "../screens/Chat";
 
 const Tab = createBottomTabNavigator();
 
@@ -53,7 +54,7 @@ export default RootNavigator = () => {
         <Tab.Screen name="Report" component={Report}
         options={{tabBarLabel : t('navigate:report')}}
         />
-        <Tab.Screen name="Chat" component={Settings}
+        <Tab.Screen name="Chat" component={Chat}
         options={{tabBarLabel : t('navigate:chat')}}
         />
         <Tab.Screen name="Settings" component={Settings}
