@@ -10,7 +10,6 @@ import Report from "../screens/Report";
 import { Chat } from "../screens/Chat";
 import { Alert } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import { Tabs } from "./TabNavigator";
 
 const Tab = createBottomTabNavigator();
 
@@ -48,10 +47,47 @@ const createScreenOptions = ({ route }) => {
 
   
 
-export default RootNavigator = () => {
+export const Tabs = () => {
+  const { t } = useTranslation();
+  const navigation = useNavigation();
   return (
-    <NavigationContainer>
-      <Tabs />
-    </NavigationContainer>
+      <Tab.Navigator screenOptions={createScreenOptions}>
+        <Tab.Screen
+          name="Home"
+          component={Home}
+          options={{ tabBarLabel: t("navigate:home") }}
+          
+        />
+        <Tab.Screen
+          name="Report"
+          component={Report}
+          options={{ tabBarLabel: t("navigate:report") }}
+          
+        />
+        <Tab.Screen
+          name="Chat"
+          component={Chat}
+          options={{ tabBarLabel: t("navigate:chat") }}
+          listeners={{
+            tabPress: (e) => {
+              e.preventDefault()
+              Alert.alert("You are about to join a live chat", "If this is an emergency, please call the police instead", [
+                {
+                  text: "Cancel",
+                  onPress: () => console.log("Cancel Pressed"),
+                  style: "cancel",
+                },
+                { text: "OK", onPress: () => {navigation.navigate("Chat")}},
+              ]);
+            },
+          }}
+        />
+        <Tab.Screen
+          name="Settings"
+          component={Settings}
+          options={{ tabBarLabel: t("navigate:settings") }}
+
+        />
+      </Tab.Navigator>
   );
 };
