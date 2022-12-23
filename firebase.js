@@ -135,7 +135,7 @@ const uploadMessage = async (messages, chatNumber) => {
     try {
         const messagesArray = Object.values(messages);
         console.log(chatNumber)
-        await setDoc(doc(db, "chats", chatNumber,), {
+        await setDoc(doc(db, "chats", chatNumber, ), {
             updatedAt: new Date(),
             messages: arrayUnion(...messagesArray),
         }, {
@@ -150,12 +150,14 @@ const uploadMessage = async (messages, chatNumber) => {
 
 const listenForMessages = async (dispatch, action, chatNumber) => {
     try {
-        const unsub = onSnapshot(doc(db, "chats", chatNumber), (doc) => {
-            if (doc.data() == undefined) {
-                return;
-            }
-            dispatch(action(doc.data().messages))
-        });
+        if (chatNumber !== null) {
+            const unsub = onSnapshot(doc(db, "chats", chatNumber), (doc) => {
+                if (doc.data() == undefined) {
+                    return;
+                }
+                dispatch(action(doc.data().messages))
+            });
+        }
     } catch (err) {
         console.error(err);
         return false;
