@@ -7,7 +7,7 @@ import {
 
 export const themeInit = () => {
   Colors.loadColors({
-    primaryColor: "#083D77",
+    primaryColor: "#2C72FB",
     secondaryColor: "#EBEBD3",
     tertiaryColor: "#DA4167",
     textColor: "#221D23",
@@ -16,6 +16,7 @@ export const themeInit = () => {
     darkerGrey: "#666666",
     lightGrey: "#ECECEE",
     darkGrey: "#BDBDBD",
+    darkGrey2: "#B0B0B0",
     errorColor: "#E63B2E",
     successColor: "#ADC76F",
     warnColor: "##FF963C",

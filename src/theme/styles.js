@@ -47,6 +47,19 @@ export const styles = StyleSheet.create({
         height: 250,
         marginBottom: 10,
     },
+    logo: {
+        width: 130,
+        height: 130,
+        resizeMode:'contain',
+    },
+    circle: {
+        width: 160,
+        height: 160,
+        borderRadius: 160/2,
+        borderWidth: 1,
+        borderColor: colors.darkGrey,
+        backgroundColor: colors.lightGrey,
+    },
     divider: {
         borderBottomColor: colors.darkGrey,
         borderBottomWidth: 1,

@@ -1,5 +1,4 @@
 import * as React from "react";
-import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Home from "../screens/Home";
 import Settings from "../screens/Settings";
@@ -10,6 +9,8 @@ import Report from "../screens/Report";
 import { Chat } from "../screens/Chat";
 import { Alert } from "react-native";
 import { useNavigation } from "@react-navigation/native";
+import { useSelector } from "react-redux";
+import { Info } from "../screens/Info";
 
 const Tab = createBottomTabNavigator();
 
@@ -44,50 +45,56 @@ const createScreenOptions = ({ route }) => {
   };
 };
 
-
-  
-
 export const Tabs = () => {
   const { t } = useTranslation();
   const navigation = useNavigation();
+  const state = useSelector((state) => state.chat);
   return (
-      <Tab.Navigator screenOptions={createScreenOptions}>
-        <Tab.Screen
-          name="Home"
-          component={Home}
-          options={{ tabBarLabel: t("navigate:home") }}
-          
-        />
-        <Tab.Screen
-          name="Report"
-          component={Report}
-          options={{ tabBarLabel: t("navigate:report") }}
-          
-        />
-        <Tab.Screen
-          name="Chat"
-          component={Chat}
-          options={{ tabBarLabel: t("navigate:chat") }}
-          listeners={{
-            tabPress: (e) => {
-              e.preventDefault()
-              Alert.alert("You are about to join a live chat", "If this is an emergency, please call the police instead", [
-                {
-                  text: "Cancel",
-                  onPress: () => console.log("Cancel Pressed"),
-                  style: "cancel",
-                },
-                { text: "OK", onPress: () => {navigation.navigate("Chat")}},
-              ]);
-            },
-          }}
-        />
-        <Tab.Screen
-          name="Settings"
-          component={Settings}
-          options={{ tabBarLabel: t("navigate:settings") }}
-
-        />
-      </Tab.Navigator>
+    <Tab.Navigator screenOptions={createScreenOptions}>
+      <Tab.Screen
+        name="Home"
+        component={Info}
+        options={{ tabBarLabel: t("navigate:home") }}
+      />
+      <Tab.Screen
+        name="Report"
+        component={Report}
+        options={{ tabBarLabel: t("navigate:report") }}
+      />
+      <Tab.Screen
+        name="Chat"
+        component={Chat}
+        options={{ tabBarLabel: t("navigate:chat") }}
+        listeners={{
+          tabPress: (e) => {
+            if (state.chatNumber === null) {
+              e.preventDefault();
+              Alert.alert(
+                "You are about to join a live chat",
+                "If this is an emergency, please call the police instead",
+                [
+                  {
+                    text: "Cancel",
+                    onPress: () => console.log("Cancel Pressed"),
+                    style: "cancel",
+                  },
+                  {
+                    text: "OK",
+                    onPress: () => {
+                      navigation.navigate("Chat");
+                    },
+                  },
+                ]
+              );
+            }
+          },
+        }}
+      />
+      <Tab.Screen
+        name="Settings"
+        component={Settings}
+        options={{ tabBarLabel: t("navigate:settings") }}
+      />
+    </Tab.Navigator>
   );
 };
