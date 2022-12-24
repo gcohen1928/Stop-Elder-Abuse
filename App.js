@@ -3,6 +3,8 @@ import { themeInit } from "./src/theme/ComponentsConfig";
 import "./src/constants/IMLocalize";
 import { Provider } from "react-redux";
 import store from "./src/redux/index";
+import 'react-native-gesture-handler';
+
 
 themeInit();
 

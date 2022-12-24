@@ -1,4 +1,4 @@
-import React , {useEffect} from "react";
+import React, { useEffect } from "react";
 
 import {
   View,
@@ -16,12 +16,14 @@ import { styles } from "../theme/styles";
 import { useTranslation } from "react-i18next";
 import { ScrollView } from "react-native";
 import { ActionBar } from "react-native-ui-lib";
+import images from "../constants/images";
 
-export const Info = () => {
+
+export const Info = ({category}) => {
   const { t } = useTranslation();
   const [pageNumber, setPageNumber] = React.useState(0);
   const buttons = ["section1", "section2", "section3"];
-  var carousel = React.createRef(Carousel)
+  var carousel = React.createRef(Carousel);
   const renderBG = (index) => {
     return pageNumber === index ? Colors.lightGrey : Colors.darkGrey;
   };
@@ -29,12 +31,12 @@ export const Info = () => {
     return pageNumber === index ? Colors.primaryColor : Colors.lightGrey;
   };
 
-  useEffect(() =>{
+  useEffect(() => {
     if (carousel) {
-        carousel.goToPage(pageNumber, true);
+      carousel.goToPage(pageNumber, true);
     }
-    console.log("Changed!")
-    }, [pageNumber])
+  }, [pageNumber]);
+  const logo = images.home[category]
 
   return (
     <ScrollView>
@@ -42,22 +44,22 @@ export const Info = () => {
         <View maxHeight={200} bg-primaryColor>
           <View top centerH marginT-80 bg-primaryColor>
             <Text white h1>
-              {t("financial:title")}
+              {t(`info:${category}:title`)}
             </Text>
           </View>
           <View marginT-s5 centerH>
             <View center style={styles.circle}>
               <Image
-                source={require("../assets/oldman.png")}
+                source={logo}
                 style={styles.logo}
               />
             </View>
           </View>
         </View>
         <View centerH marginT-125 paddingH-30>
-          <Text h1>{t("financial:header")}</Text>
+          <Text h1>{t(`info:${category}:header`)}</Text>
           <Text center h4 marginT-s3>
-            {t("financial:subheader")}
+            {t(`info:${category}:subheader`)}
           </Text>
         </View>
       </View>
@@ -67,12 +69,13 @@ export const Info = () => {
             return (
               <Button
                 flex
+                key={index}
                 marginR-10
                 backgroundColor={renderBG(index)}
                 onPress={() => setPageNumber(index)}
               >
                 <Text label color={renderColor(index)}>
-                  {t(`financial:${button}`)}
+                  {t(`info:${category}:${button}`)}
                 </Text>
               </Button>
             );
@@ -83,6 +86,8 @@ export const Info = () => {
         <Carousel
           borderRadius={20}
           initialPage={pageNumber}
+          itemSpacings={Spacings.s10}
+          containerMarginHoriontal={Spacings.s10}
           onChangePage={(pageIndex, oldIndex) => {
             if (pageIndex === 0) {
               setPageNumber(0);
@@ -92,17 +97,23 @@ export const Info = () => {
               setPageNumber(2);
             }
           }}
-          ref={ref=>carousel = ref}
-          
-
+          ref={(ref) => (carousel = ref)}
         >
           {buttons.map((button, index) => {
             return (
-              <Card backgroundColor={Colors.lightGrey}>
+              <Card key={index} style={{ margin: 10 }} backgroundColor={Colors.lightGrey}>
                 <View padding-20>
-                  <Text h2 marginB-s3 padding-10> {t(`financial:${button}Title`)}</Text>
-                  <View backgroundColor= {Colors.darkerGrey} height={1} marginB-s3 ></View>
-                  <Text body darkerGrey>{t(`financial:${button}Text`)}</Text>
+                  <Text center h2 marginB-s3 centerH>
+                    {t(`info:${category}:${button}Title`)}
+                  </Text>
+                  <View
+                    backgroundColor={Colors.darkerGrey}
+                    height={1}
+                    marginB-s3
+                  ></View>
+                  <Text body darkerGrey>
+                    {t(`info:${category}:${button}Text`)}
+                  </Text>
                 </View>
 
                 <Card.Section
@@ -122,13 +133,14 @@ export const Info = () => {
           })}
         </Carousel>
       </View>
-
-      <PageControl
-        numOfPages={3}
-        color={Colors.primaryColor}
-        activeColor={Colors.darkGrey}
-        currentPage={pageNumber}
-      />
+      <View marginB-s10>
+        <PageControl
+          numOfPages={3}
+          color={Colors.primaryColor}
+          activeColor={Colors.darkGrey}
+          currentPage={pageNumber}
+        />
+      </View>
     </ScrollView>
   );
 };

@@ -37,11 +37,10 @@ export const Chat = ( {navigation}) => {
     dispatch(sendMessage(newMessages, chatNumber));
   };
   useEffect(() => {
-    const start = async () => {
+    const createChat = async () => {
       await dispatch(startChat());
     };
     const listen = async (chatNumber) => {
-      console.log(chatNumber);
       const res = await listenForMessages(
         dispatch,
         receiveMessages,
@@ -49,8 +48,7 @@ export const Chat = ( {navigation}) => {
       );
       return res;
     };
-    start();
-    console.log(chatNumber);
+    createChat();
     listen(chatNumber);
     
   }, []);

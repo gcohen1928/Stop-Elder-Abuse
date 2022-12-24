@@ -1,7 +1,6 @@
 import * as React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import Home from "../screens/Home";
-import Settings from "../screens/Settings";
+import {Settings}from "../screens/Settings";
 import { Colors } from "react-native-ui-lib";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { useTranslation } from "react-i18next";
@@ -11,6 +10,8 @@ import { Alert } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { useSelector } from "react-redux";
 import { Info } from "../screens/Info";
+import HomeStack from "./HomeStack";
+
 
 const Tab = createBottomTabNavigator();
 
@@ -53,7 +54,7 @@ export const Tabs = () => {
     <Tab.Navigator screenOptions={createScreenOptions}>
       <Tab.Screen
         name="Home"
-        component={Info}
+        component={HomeStack}
         options={{ tabBarLabel: t("navigate:home") }}
       />
       <Tab.Screen
