@@ -35,4 +35,7 @@ export default {
     video2: "Select a Video",
     email : "Correao electrónico",
     emailConsent: "¿Consiente en ser contactado por correo electrónico?",
+    popupTitle: "Estás a punto de crear un informe",
+    popupText:  "Si eres un ser querido de un anciano abusado, un anciano abusado, o un reportero obligatorio, por favor llene el formulario a continuación. Cuanta más información nos proporcione, mejor podremos ayudarlo en su caso, así que por favor sea lo más descriptivo posible al completar este informe.",
+    disclaimer: "Hacer un informe falso de abuso, negligencia o explotación de un adulto vulnerable; que es un informe que no se hizo de buena fe, es un delito grave de tercer grado y está sujeto a una multa administrativa de hasta $10,000. (F.S 415 y CFOP 140-2 Capítulo 3)"
 }

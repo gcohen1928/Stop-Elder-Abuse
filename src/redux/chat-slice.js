@@ -1,6 +1,7 @@
 import {
     createSlice
 } from "@reduxjs/toolkit";
+import images from "../constants/images";
 
 
 const chatSlice = createSlice({
@@ -9,12 +10,12 @@ const chatSlice = createSlice({
         chatNumber: null,
         messages: [{
             _id: 1,
-            text: 'Hey, an agent will be with you soon. In the meantime, please describe your issue. We\'ll message you as soon as we get someone on the line for you.',
+            text: 'Hi!\n\nAn agent will be with you soon. In the meantime, please describe your issue. \n\nWe\'ll message you as soon as we get someone on the line for you.',
             createdAt: new Date ().toISOString(),
             user: {
                 _id: 2,
                 name: 'Florida DCF',
-                avatar: 'https://placeimg.com/140/140/any',
+                avatar: images.chat.profile,
             }
         }]
 

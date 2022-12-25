@@ -8,6 +8,7 @@ import { v4 as uuidv4 } from "uuid";
 import { useTranslation } from "react-i18next";
 import { Alert, BackHandler } from "react-native";
 import { useFocusEffect } from "@react-navigation/native";
+import images from "../constants/images";
 
 
 export const Chat = ( {navigation}) => {
@@ -21,12 +22,12 @@ export const Chat = ( {navigation}) => {
   const onSend = (messages = []) => {
     messages.push({
       _id: uuidv4(),
-      text: "I reply quickly",
+      text: "Hello developer",
       createdAt: new Date(),
       user: {
         _id: 2,
         name: "React Native",
-        avatar: "https://placeimg.com/140/140/any",
+        avatar: images.chat.profile,
       },
     });
     const newMessages = messages.map((message) => ({

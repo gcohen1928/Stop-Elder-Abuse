@@ -10,19 +10,17 @@ import {
   Checkbox,
   Colors,
   Image,
+  Dialog,
+  PanningDirections,
+  PanningProvider,
 } from "react-native-ui-lib";
 import { useTranslation } from "react-i18next";
-import { connect } from "react-redux";
-import { changeData, sendReportAction } from "../redux/form-actions";
+import { reset, sendReportAction, startForm } from "../redux/form-actions";
 import { styles } from "../theme/styles";
 import * as ImagePicker from "expo-image-picker";
 import { Video } from "expo-av";
 import { FormInput, SectionHeader, SquareButton } from "../components/Input";
-import { Platform } from "react-native";
-import { formActions } from "../redux/form-slice";
-
-
-
+import { Alert } from "react-native";
 
 const ReporterInfo = ({ state, dispatch, t }) => {
   return (
@@ -120,7 +118,7 @@ const Attatchments = ({ state, dispatch, t }) => {
       dispatch({
         type: "UPDATE",
         key: key,
-        value: pickerResult.assets[0].uri
+        value: pickerResult.assets[0].uri,
       });
     }
   };
@@ -139,19 +137,19 @@ const Attatchments = ({ state, dispatch, t }) => {
             ) : null}
             {(attatchment === "video1" || attatchment === "video2") &&
             state[attatchment] ? (
-                <>
+              <>
                 <Video
-                    source={{ uri: state[attatchment] }}
-                    rate={1.0}
-                    volume={1.0}
-                    isMuted={false}
-                    resizeMode="cover"
-                    shouldPlay
-                    isLooping
-                    style={styles.image}
+                  source={{ uri: state[attatchment] }}
+                  rate={1.0}
+                  volume={1.0}
+                  isMuted={false}
+                  resizeMode="cover"
+                  shouldPlay
+                  isLooping
+                  style={styles.image}
                 />
                 <Text>{state[attatchment]}</Text>
-                </>
+              </>
             ) : null}
             <SquareButton
               label={t(`form:${attatchment}`)}
@@ -179,50 +177,53 @@ const Attatchments = ({ state, dispatch, t }) => {
           marginT-s1
         />
       </View>
+      <Text marginV-20 smallerBody darkerGrey>
+        {"DISCLAIMER:\n\n" + t("form:disclaimer")}
+      </Text>
     </>
   );
 };
 
 const initialState = {
-    name: "",
-    address: "",
-    phone: "",
-    city: "",
-    postalCode: "",
-    contactConsent: false,
-    agency: "",
-    jobTitle: "",
-    relationship: "",
-    victimName: "",
-    victimAddress: "",
-    victimPhone: "",
-    victimCity: "",
-    victimPostalCode: "",
-    DOB: "",
-    sex: "",
-    race: "",
-    SSN: "",
-    image1: "",
-    image2: "",
-    video1: "",
-    video2: "",
-    email: "",
-    emailConsent: false
-  };
-  
-  const reducer = (state, action) => {
-    switch (action.type) {
-      case "UPDATE":
-        return {
-          ...state,
-          [action.key]: action.value,
-        };
-      case "RESET":
-        return initialState
-      default:
-        return state;
-    }
-  };
+  name: "",
+  address: "",
+  phone: "",
+  city: "",
+  postalCode: "",
+  contactConsent: false,
+  agency: "",
+  jobTitle: "",
+  relationship: "",
+  victimName: "",
+  victimAddress: "",
+  victimPhone: "",
+  victimCity: "",
+  victimPostalCode: "",
+  DOB: "",
+  sex: "",
+  race: "",
+  SSN: "",
+  image1: "",
+  image2: "",
+  video1: "",
+  video2: "",
+  email: "",
+  emailConsent: false,
+};
+
+const reducer = (state, action) => {
+  switch (action.type) {
+    case "UPDATE":
+      return {
+        ...state,
+        [action.key]: action.value,
+      };
+    case "RESET":
+      return initialState;
+    default:
+      return state;
+  }
+};
 
 const Report = ({ navigation }, props) => {
   const { t } = useTranslation();
@@ -230,7 +231,7 @@ const Report = ({ navigation }, props) => {
   const [state, dispatch] = useReducer(reducer, initialState);
   const globalDispatch = useDispatch();
   const [activeIndex, setActiveIndex] = useState(0);
-  const [completedStepIndex, setCompletedStepIndex] = useState(undefined);
+  const [showPopup, setShowPopup] = useState(true);
 
   const renderCurrentStep = ({ navigation, state, dispatch, t }) => {
     switch (activeIndex) {
@@ -279,15 +280,28 @@ const Report = ({ navigation }, props) => {
   };
 
   const NextButton = () => {
-    const complete = activeIndex === 3
+    const complete = activeIndex === 3;
     return (
       <Button
         marginH-50
         marginB-s10
         bg-primaryColor
-        label={complete? t("common:submit") : t("common:next")}
+        label={complete ? t("common:submit") : t("common:next")}
         labelStyle={{ color: Colors.white }}
-        onPress={complete? handleSubmit :  goToNextStep}
+        onPress={
+          complete
+            ? () => {
+                Alert.alert(t("common:submit"), t("common:submitConfirm"), [
+                  {
+                    text: t("common:cancel"),
+                    onPress: () => console.log("Cancel Pressed"),
+                    style: "cancel",
+                  },
+                  { text: t("common:submit"), onPress: handleSubmit },
+                ]);
+              }
+            : goToNextStep
+        }
       />
     );
   };
@@ -296,18 +310,21 @@ const Report = ({ navigation }, props) => {
     globalDispatch(sendReportAction(state));
   };
 
-
   useEffect(() => {
-    if (data.complete){
-      alert("Report Submitted!")
+    if (data.complete) {
+      alert("Report Submitted!");
       dispatch({ type: "RESET" });
       setActiveIndex(0);
       setCompletedStepIndex(undefined);
     } else if (data.failed) {
-      alert("Report Upload Failed!")
+      alert("Report Upload Failed!");
     }
-    globalDispatch(formActions.resetData());
+    globalDispatch(reset);
   }, [data.complete, data.failed]);
+
+  useEffect(() => {
+    globalDispatch(startForm());
+  }, []);
 
   return (
     <KeyboardAwareScrollView>
@@ -327,6 +344,22 @@ const Report = ({ navigation }, props) => {
         {renderCurrentStep({ navigation, state, dispatch, t })}
       </View>
       <NextButton />
+      <Dialog visible={showPopup} containerStyle={styles.popup}
+      panDirection={PanningProvider.Directions.DOWN}
+      bottom = {true}
+      >
+        <Incubator.Dialog.Header title={t("form:popupTitle")} />
+        <View padding-20>
+          <Text smallerBody>{t("form:popupText")}</Text>
+          <Button
+            marginT-20
+            bg-primaryColor
+            onPress={() => setShowPopup(false)}
+          >
+            <Text white>{t("common:ok")}</Text>
+          </Button>
+        </View>
+      </Dialog>
     </KeyboardAwareScrollView>
   );
 };

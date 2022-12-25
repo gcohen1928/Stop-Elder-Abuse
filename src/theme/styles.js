@@ -64,4 +64,16 @@ export const styles = StyleSheet.create({
         borderBottomColor: colors.darkGrey,
         borderBottomWidth: 1,
     },
-});
+    link: {
+        color: "#3366CC",
+        textDecorationLine: 'underline',
+        fontSize: 15, 
+    },
+    popup: {
+        backgroundColor: colors.white,
+        padding: 1,
+        borderRadius: 10,
+
+    }
+    }
+);

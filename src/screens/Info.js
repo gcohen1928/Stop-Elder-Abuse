@@ -10,13 +10,14 @@ import {
   PageControl,
   Card,
   Spacings,
+  TouchableOpacity,
 } from "react-native-ui-lib";
 
 import { styles } from "../theme/styles";
 import { useTranslation } from "react-i18next";
-import { ScrollView } from "react-native";
-import { ActionBar } from "react-native-ui-lib";
+import { ScrollView, Linking} from "react-native";
 import images from "../constants/images";
+import { ColoredHeader } from "../components/ColoredHeader";
 
 
 export const Info = ({category}) => {
@@ -41,21 +42,7 @@ export const Info = ({category}) => {
   return (
     <ScrollView>
       <View flex>
-        <View maxHeight={200} bg-primaryColor>
-          <View top centerH marginT-80 bg-primaryColor>
-            <Text white h1>
-              {t(`info:${category}:title`)}
-            </Text>
-          </View>
-          <View marginT-s5 centerH>
-            <View center style={styles.circle}>
-              <Image
-                source={logo}
-                style={styles.logo}
-              />
-            </View>
-          </View>
-        </View>
+        <ColoredHeader text = {t(`info:${category}:title`)} logo={logo}/> 
         <View centerH marginT-125 paddingH-30>
           <Text h1>{t(`info:${category}:header`)}</Text>
           <Text center h4 marginT-s3>
@@ -115,19 +102,24 @@ export const Info = ({category}) => {
                     {t(`info:${category}:${button}Text`)}
                   </Text>
                 </View>
-
+                <TouchableOpacity
+                    onPress = {() => Linking.openURL('tel:1-800-962-2873')}
+                >
                 <Card.Section
                   bg-primaryColor
                   padding-10
                   content={[
                     {
-                      text: "Call 1-800-962-2873 for Help Now",
+                      text: `Call 1-800-962-2873 for Help Now`,
                       text70: true,
                       white: true,
                     },
                   ]}
+                  onPress = {() => Linking.openURL('tel:1-800-962-2873')}
                   contentStyle={{ alignItems: "center" }}
                 ></Card.Section>
+                </TouchableOpacity>
+                
               </Card>
             );
           })}

@@ -21,3 +21,15 @@ export const sendReportAction = (report) => {
     }
   };
 };
+
+export const reset = () => {
+  return async (dispatch) => {
+    dispatch(formActions.resetData());
+  };
+}
+
+export const startForm = () => {
+  return async (dispatch) => {
+    dispatch(formActions.setData({started: true, complete: false, failed: false}));
+  };
+}

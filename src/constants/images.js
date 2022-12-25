@@ -5,6 +5,9 @@ const images = {
         physical: require('../assets/physical.png'),
         neglect: require('../assets/neglect.png'),
     },
+    chat: {
+        profile: require('../assets/defaultprofile.png'),
+    }
     };
     
     export default images;
