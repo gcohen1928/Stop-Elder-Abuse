@@ -13,6 +13,7 @@ import {
 } from "react-native-ui-lib";
 import { HomeListItem } from "../components/HomeList";
 import { useTranslation } from "react-i18next";
+import { Linking } from "react-native";
 const categories = [ "resources","financial", "physical", "neglect",];
 
 export const Home = () => {
@@ -21,7 +22,7 @@ export const Home = () => {
   return (
     <ScrollView>
       <View flex padding-page>
-        <Text h1 marginT-100 marginB-s10>
+        <Text h1 marginT-85 marginB-s10>
           Stop Elder Abuse
         </Text>
         {categories.map((category) => {
@@ -30,14 +31,22 @@ export const Home = () => {
 
         <Button
           marginT-10
-          label={t("common:report")}
+          onPress={() => Linking.openURL("tel:911")}
+          body
+          bg-tertiaryColor
+        >
+          <Text text70 underline white>Call 911</Text>
+        </Button>
+        <Button
+          marginT-10
+          label={"File a Report Now"}
           onPress={() => navigation.navigate("Report")}
           body
           bg-primaryColor
-        ></Button>
+        />
         <Button
           marginT-10
-          label={t("common:chat")}
+          label={"Chat with a Counselor"}
           onPress={() => {
             Alert.alert(
               "You are about to join a live chat",

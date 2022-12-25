@@ -2,14 +2,14 @@
   "expo": {
     "name": "stop-elder-abuse",
     "slug": "stop-elder-abuse",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#CCCCCC"
     },
     "updates": {
       "fallbackToCacheTimeout": 0
@@ -18,7 +18,8 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.gcohen1928.stopelderabuse"
     },
     "android": {
       "adaptiveIcon": {
@@ -28,6 +29,11 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "7d7a0ac6-5b0f-4e00-8435-7684c8a600f3"
+      }
     }
   }
 }

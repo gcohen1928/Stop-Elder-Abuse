@@ -67,7 +67,7 @@ export default {
         questions: {
             title: "Preguntas Para Hacer",
             subtitle: "Preguntas para hacer a un cuidador de ancianos",
-            website: "https://elder-abuseca.com/What-to-ask-home-caregiver.html ",
+            website: "https://elder-abuseca.com/What-to-ask-home-caregiver.html",
         },
         elderAffairs: {
             title: "Agencia del Gobierno",

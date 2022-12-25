@@ -178,7 +178,7 @@ const Attatchments = ({ state, dispatch, t }) => {
         />
       </View>
       <Text marginV-20 smallerBody darkerGrey>
-        {"DISCLAIMER:\n\n" + t("form:disclaimer")}
+        {t("form:disclaimer")}
       </Text>
     </>
   );
@@ -229,7 +229,7 @@ const Report = ({ navigation }, props) => {
   const { t } = useTranslation();
   const data = useSelector((state) => state.form);
   const [state, dispatch] = useReducer(reducer, initialState);
-  const globalDispatch = useDispatch();
+  const globalDispatch = useDispatch()
   const [activeIndex, setActiveIndex] = useState(0);
   const [showPopup, setShowPopup] = useState(true);
 
@@ -265,9 +265,7 @@ const Report = ({ navigation }, props) => {
     if (activeIndex === 3) {
       handleSubmit();
       setActiveIndex(0);
-      setCompletedStepIndex(undefined);
     } else {
-      setCompletedStepIndex(activeIndex);
       setActiveIndex(activeIndex + 1);
     }
   };
@@ -315,7 +313,6 @@ const Report = ({ navigation }, props) => {
       alert("Report Submitted!");
       dispatch({ type: "RESET" });
       setActiveIndex(0);
-      setCompletedStepIndex(undefined);
     } else if (data.failed) {
       alert("Report Upload Failed!");
     }

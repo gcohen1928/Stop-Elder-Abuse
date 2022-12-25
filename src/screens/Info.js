@@ -15,12 +15,12 @@ import {
 
 import { styles } from "../theme/styles";
 import { useTranslation } from "react-i18next";
-import { ScrollView, Linking} from "react-native";
+import { ScrollView, Linking } from "react-native";
 import images from "../constants/images";
 import { ColoredHeader } from "../components/ColoredHeader";
+import { Link } from "@react-navigation/native";
 
-
-export const Info = ({category}) => {
+export const Info = ({ category }) => {
   const { t } = useTranslation();
   const [pageNumber, setPageNumber] = React.useState(0);
   const buttons = ["section1", "section2", "section3"];
@@ -37,12 +37,12 @@ export const Info = ({category}) => {
       carousel.goToPage(pageNumber, true);
     }
   }, [pageNumber]);
-  const logo = images.home[category]
+  const logo = images.home[category];
 
   return (
     <ScrollView>
       <View flex>
-        <ColoredHeader text = {t(`info:${category}:title`)} logo={logo}/> 
+        <ColoredHeader text={t(`info:${category}:title`)} logo={logo} />
         <View centerH marginT-125 paddingH-30>
           <Text h1>{t(`info:${category}:header`)}</Text>
           <Text center h4 marginT-s3>
@@ -88,7 +88,11 @@ export const Info = ({category}) => {
         >
           {buttons.map((button, index) => {
             return (
-              <Card key={index} style={{ margin: 10 }} backgroundColor={Colors.lightGrey}>
+              <Card
+                key={index}
+                style={{ margin: 10 }}
+                backgroundColor={Colors.lightGrey}
+              >
                 <View padding-20>
                   <Text center h2 marginB-s3 centerH>
                     {t(`info:${category}:${button}Title`)}
@@ -103,23 +107,22 @@ export const Info = ({category}) => {
                   </Text>
                 </View>
                 <TouchableOpacity
-                    onPress = {() => Linking.openURL('tel:1-800-962-2873')}
+                  onPress={() => Linking.openURL("tel:1-800-962-2873")}
                 >
-                <Card.Section
-                  bg-primaryColor
-                  padding-10
-                  content={[
-                    {
-                      text: `Call 1-800-962-2873 for Help Now`,
-                      text70: true,
-                      white: true,
-                    },
-                  ]}
-                  onPress = {() => Linking.openURL('tel:1-800-962-2873')}
-                  contentStyle={{ alignItems: "center" }}
-                ></Card.Section>
+                  <Card.Section
+                    bg-primaryColor
+                    padding-10
+                    content={[
+                      {
+                        text: `Call 1-800-962-2873 for Help Now`,
+                        text70: true,
+                        white: true,
+                      },
+                    ]}
+                    onPress={() => Linking.openURL("tel:1-800-962-2873")}
+                    contentStyle={{ alignItems: "center" }}
+                  ></Card.Section>
                 </TouchableOpacity>
-                
               </Card>
             );
           })}
@@ -132,6 +135,18 @@ export const Info = ({category}) => {
           activeColor={Colors.darkGrey}
           currentPage={pageNumber}
         />
+      </View>
+      <View centerH padding-10>
+        <Text>
+          {t(`common:source`)}: {"\n\n"}
+          <Text
+            onPress={() => Linking.openURL(t(`info:${category}:source`))}
+            link
+            style={styles.link}
+          >
+            {t(`info:${category}:source`)}
+          </Text>
+        </Text>
       </View>
     </ScrollView>
   );

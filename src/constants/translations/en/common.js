@@ -6,9 +6,10 @@ export default {
     back: "Back",
     next: "Next",
     submit: "Submit",
-    report: "File a Report Now",
-    chat: "Chat with a Counselor",
     cancel: "Cancel",
     ok: "Ok",
     submitConfirm: "Are you sure you want to submit this report?",
+    chat: "Chat with a counselor",
+    report: "Submit a report",
+    source: "Sourced from",
 }
