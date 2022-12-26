@@ -82,7 +82,6 @@ const sendReport = async (data) => {
 const uploadImage = async (uri) => {
     try {
         const uploadUrl = await uploadImageAsync(uri);
-        console.log(uploadUrl);
         return uploadUrl
     } catch (e) {
         console.log(e);
@@ -119,9 +118,9 @@ async function uploadImageAsync(uri) {
 const createChat = async () => {
     try {
         const id = uuidv4();
-        await setDoc(doc(db, "chats", id), {
+        await setDoc(doc(db, "chats", "1"), {
             id: id,
-            updatedAt: new Date(),
+            updatedAt: new Date().toISOString(),
             messages: []
         });
         return id;
@@ -134,9 +133,8 @@ const createChat = async () => {
 const uploadMessage = async (messages, chatNumber) => {
     try {
         const messagesArray = Object.values(messages);
-        console.log(chatNumber)
-        await setDoc(doc(db, "chats", chatNumber, ), {
-            updatedAt: new Date(),
+        await setDoc(doc(db, "chats", "1", ), {
+            updatedAt: new Date().toISOString(),
             messages: arrayUnion(...messagesArray),
         }, {
             merge: true
@@ -150,14 +148,12 @@ const uploadMessage = async (messages, chatNumber) => {
 
 const listenForMessages = async (dispatch, action, chatNumber) => {
     try {
-        if (chatNumber !== null) {
-            const unsub = onSnapshot(doc(db, "chats", chatNumber), (doc) => {
-                if (doc.data() == undefined) {
-                    return;
-                }
+            const unsub = onSnapshot(doc(db, "chats", "1"), (doc) => {
+                
+                console.log("listenign!!")
                 dispatch(action(doc.data().messages))
             });
-        }
+        
     } catch (err) {
         console.error(err);
         return false;

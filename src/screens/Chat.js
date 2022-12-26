@@ -41,6 +41,13 @@ export const Chat = ( {navigation}) => {
     const createChat = async () => {
       await dispatch(startChat());
     };
+    
+    createChat();
+
+    
+  }, []);
+
+  useEffect(() => {
     const listen = async (chatNumber) => {
       const res = await listenForMessages(
         dispatch,
@@ -49,10 +56,12 @@ export const Chat = ( {navigation}) => {
       );
       return res;
     };
-    createChat();
-    listen(chatNumber);
-    
-  }, []);
+      listen(chatNumber)
+  }, [chatNumber]);
+
+  // useEffect(() => {
+  //   console.log(messages)
+  // }, [messages]);
 
 
 
